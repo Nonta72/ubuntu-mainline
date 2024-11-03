@@ -28,11 +28,11 @@ mkdir -p "$BOOT_DIR"
 # Check if the boot files exist and copy them
 ls $IMAGE_PATH
 if [ -f "$IMAGE_PATH" ] && [ -f "$DTB_PATH" ]; then
-    cp "$IMAGE_PATH" "$BOOT_DIR/vmlinuz-$KERNEL_VER"
-    cp "$DTB_PATH" "$BOOT_DIR/dtb-$KERNEL_VER"
+	cp "$IMAGE_PATH" "$BOOT_DIR/vmlinuz-$KERNEL_VER"
+	cp "$DTB_PATH" "$BOOT_DIR/dtb-$KERNEL_VER"
 else
-    echo "Boot files not found."
-    exit 1
+	echo "Boot files not found."
+	exit 1
 fi
 
 # Remove the lib directory if it exists
