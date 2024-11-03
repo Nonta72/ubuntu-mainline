@@ -17,7 +17,7 @@ fi
 cd "$KERNEL_DIR"
 
 # Build the kernel using the specified defconfig
-make $MAKEPROPS "$DEFCONFIG" && make $MAKEPROPS
+make $MAKEPROPS $DEFCONFIG && make $MAKEPROPS
 
 # Get the kernel version
 KERNEL_VER="$(make $MAKEPROPS kernelrelease -s)"
