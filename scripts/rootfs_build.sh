@@ -8,7 +8,7 @@ then
 	exit
 fi
 
-VERSION="23.10"
+VERSION="24.10"
 
 truncate -s 6G rootfs.img
 mkfs.ext4 rootfs.img
