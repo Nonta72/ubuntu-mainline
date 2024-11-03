@@ -20,7 +20,7 @@ cd "$KERNEL_DIR"
 make $MAKEPROPS "$DEFCONFIG" && make $MAKEPROPS
 
 # Get the kernel version
-KERNEL_VER="$(make kernelrelease -s)"
+KERNEL_VER="$(make $MAKEPROPS kernelrelease -s)"
 
 # Create the boot directory
 mkdir -p "$BOOT_DIR"
@@ -36,13 +36,13 @@ else
 fi
 
 # Remove the lib directory if it exists
-rm -rf "${OUTPUT_DIR}/lib" || true
+rm -rf "${OUTPUT_DIR}/lib"
 
 # Install the modules to the output directory
 make $MAKEPROPS INSTALL_MOD_PATH="$OUTPUT_DIR" modules_install || { echo "Modules installation failed"; exit 1; }
 
 # Remove all 'build' directories within the modules
-find "$OUTPUT_DIR/lib/modules" -type d -name "build" -exec rm -rf {} + || { echo "Failed to remove build directories"; exit 1; }
+find "$OUTPUT_DIR/lib/modules" -type d -name "build" -exec rm -rf {} + || { echo "Failed to remove build directories"; }
 
 # Change back to the parent directory
 cd ..

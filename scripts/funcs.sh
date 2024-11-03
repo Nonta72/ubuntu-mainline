@@ -8,7 +8,7 @@ generate_control() {
 
 	case "$package_type" in
 		linux)
-			version="$KVER-$SOC"
+			version="$KERNEL_VER-$SOC"
 			extra_fields="Section: kernel"
 			description="Kernel and Modules"
 			;;
@@ -32,7 +32,7 @@ Replaces: linux-firmware"
 	mkdir -p "$package_type-$VENDOR-$CODENAME/DEBIAN"
 
 cat << EOF > "$package_type-$VENDOR-$CODENAME/DEBIAN/control"
-Package: $package_type-$VENDOR-$CODENAME"
+Package: $package_type-$VENDOR-$CODENAME
 Version: $version
 Architecture: $ARCH
 Maintainer: $MAINTAINER
