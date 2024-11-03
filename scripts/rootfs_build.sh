@@ -1,9 +1,11 @@
-#!/bin/sh
+#!/bin/bash
+
+source ./scripts/vars.sh
 
 if [ "$(id -u)" -ne 0 ]
 then
-  echo "rootfs can only be built as root"
-  exit
+	echo "rootfs can only be built as root"
+	exit
 fi
 
 VERSION="23.10"
@@ -23,20 +25,20 @@ mount --bind /proc rootdir/proc
 mount --bind /sys rootdir/sys
 
 echo "nameserver 1.1.1.1" | tee rootdir/etc/resolv.conf
-echo "xiaomi-nabu" | tee rootdir/etc/hostname
+echo "${VENDOR}-${CODENAME}" | tee rootdir/etc/hostname
 echo "127.0.0.1 localhost
-127.0.1.1 xiaomi-nabu" | tee rootdir/etc/hosts
+127.0.1.1 ${VENDOR}-${CODENAME}" | tee rootdir/etc/hosts
 
 if uname -m | grep -q aarch64
 then
-  echo "cancel qemu install for arm64"
+	echo "cancel qemu install for arm64"
 else
-  wget https://github.com/multiarch/qemu-user-static/releases/download/v7.2.0-1/qemu-aarch64-static
-  install -m755 qemu-aarch64-static rootdir/
+	wget https://github.com/multiarch/qemu-user-static/releases/download/v7.2.0-1/qemu-aarch64-static
+	install -m755 qemu-aarch64-static rootdir/
 
-  echo ':aarch64:M::\x7fELF\x02\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\xb7:\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff:/qemu-aarch64-static:' | tee /proc/sys/fs/binfmt_misc/register
-  #ldconfig.real abi=linux type=dynamic
-  echo ':aarch64ld:M::\x7fELF\x02\x01\x01\x03\x00\x00\x00\x00\x00\x00\x00\x00\x03\x00\xb7:\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff:/qemu-aarch64-static:' | tee /proc/sys/fs/binfmt_misc/register
+	echo ':aarch64:M::\x7fELF\x02\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\xb7:\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff:/qemu-aarch64-static:' | tee /proc/sys/fs/binfmt_misc/register
+	#ldconfig.real abi=linux type=dynamic
+	echo ':aarch64ld:M::\x7fELF\x02\x01\x01\x03\x00\x00\x00\x00\x00\x00\x00\x00\x03\x00\xb7:\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff:/qemu-aarch64-static:' | tee /proc/sys/fs/binfmt_misc/register
 fi
 
 
@@ -60,11 +62,11 @@ chroot rootdir apt install -y rmtfs protection-domain-mapper tqftpserv
 #Remove check for "*-laptop"
 sed -i '/ConditionKernelVersion/d' rootdir/lib/systemd/system/pd-mapper.service
 
-cp /home/runner/work/ubuntu-xiaomi-nabu/ubuntu-xiaomi-nabu/xiaomi-nabu-debs_$2/*-xiaomi-nabu.deb rootdir/tmp/
-chroot rootdir dpkg -i /tmp/linux-xiaomi-nabu.deb
-chroot rootdir dpkg -i /tmp/firmware-xiaomi-nabu.deb
-chroot rootdir dpkg -i /tmp/alsa-xiaomi-nabu.deb
-rm rootdir/tmp/*-xiaomi-nabu.deb
+cp /home/runner/work/ubuntu-${VENDOR}-${CODENAME}/ubuntu-${VENDOR}-${CODENAME}/${VENDOR}-${CODENAME}-debs_$2/*-${VENDOR}-${CODENAME}.deb rootdir/tmp/
+chroot rootdir dpkg -i /tmp/linux-${VENDOR}-${CODENAME}.deb
+chroot rootdir dpkg -i /tmp/firmware-${VENDOR}-${CODENAME}.deb
+chroot rootdir dpkg -i /tmp/alsa-${VENDOR}-${CODENAME}.deb
+rm rootdir/tmp/*-${VENDOR}-${CODENAME}.deb
 
 
 #EFI
@@ -88,13 +90,13 @@ chroot rootdir apt clean
 
 if uname -m | grep -q aarch64
 then
-  echo "cancel qemu install for arm64"
+	echo "cancel qemu install for arm64"
 else
-  #Remove qemu emu
-  echo -1 | tee /proc/sys/fs/binfmt_misc/aarch64
-  echo -1 | tee /proc/sys/fs/binfmt_misc/aarch64ld
-  rm rootdir/qemu-aarch64-static
-  rm qemu-aarch64-static
+	#Remove qemu emu
+	echo -1 | tee /proc/sys/fs/binfmt_misc/aarch64
+	echo -1 | tee /proc/sys/fs/binfmt_misc/aarch64ld
+	rm rootdir/qemu-aarch64-static
+	rm qemu-aarch64-static
 fi
 
 umount rootdir/sys
