@@ -1,0 +1,10 @@
+# Device (e.g. Nothing Phone (1):sm7325-nothing-spacewar)
+DEVICE="devicename:soc-vendor-codename"
+
+# Kernel
+KERNEL_SOURCE="https://github.com/torvalds/linux"
+BRANCH="master"
+DEFCONFIG="defconfig"
+
+# Maintainer
+MAINTAINER="Ubuntu Mainline <fix@me>"
