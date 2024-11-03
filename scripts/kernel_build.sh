@@ -9,11 +9,11 @@ if [ -d "$KERNEL_DIR" ]; then
 	echo "Directory '$KERNEL_DIR' exists."
 	read -p "Do you want to delete it and re-clone? (y/n): " answer
 	if [[ "$answer" =~ ^[Yy]$ ]]; then
-		sudo rm -rf "$KERNEL_DIR" || { echo "Failed to remove $KERNEL_DIR"; exit 1; }
-		git clone $SOURCE --depth 1 || { echo "Failed to clone kernel source"; exit 1; }
+		rm -rf "$KERNEL_DIR" || { echo "Failed to remove $KERNEL_DIR"; exit 1; }
+		git clone $SOURCE --depth 1 "${KERNEL_DIR}" || { echo "Failed to clone kernel source"; exit 1; }
 	fi
 else
-	git clone $SOURCE --depth 1 || { echo "Failed to clone kernel source"; exit 1; }
+	git clone $SOURCE --depth 1 "${KERNEL_DIR}" || { echo "Failed to clone kernel source"; exit 1; }
 fi
 
 # Change to the kernel directory
