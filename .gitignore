@@ -1,6 +1,7 @@
-/linux*
-/cache_git/
 /build/
+/cache_git/
+/linux*
 /rootfs.*
 *.deb
+*.patch
 *.tar.gz
