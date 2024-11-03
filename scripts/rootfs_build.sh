@@ -2,6 +2,8 @@
 
 source ./scripts/vars.sh
 
+mkdir -p "${GIT_CACHE_DIR}" "${BUILD_DIR}"
+
 if [ "$(id -u)" -ne 0 ]
 then
 	echo "rootfs can only be built as root"
@@ -10,13 +12,24 @@ fi
 
 VERSION="24.10"
 
-truncate -s 6G rootfs.img
-mkfs.ext4 rootfs.img
-mkdir rootdir
-mount -o loop rootfs.img rootdir
+if [ ! -f "ubuntu-base-$UBUNTU_VERSION-base-arm64.tar.gz" ]; then
+  wget https://cdimage.ubuntu.com/ubuntu-base/releases/$UBUNTU_VERSION/release/ubuntu-base-$UBUNTU_VERSION-base-arm64.tar.gz
+else
+  echo Rootfs is already downloaded, skipping... You can delete it manually.
+fi
 
-wget https://cdimage.ubuntu.com/ubuntu-base/releases/$VERSION/release/ubuntu-base-$VERSION-base-arm64.tar.gz
-tar xzvf ubuntu-base-$VERSION-base-arm64.tar.gz -C rootdir
+mkdir -p rootdir
+
+if [ ! -f rootfs.img ]; then
+  truncate -s 6G rootfs.img
+  mkfs.ext4 rootfs.img
+  mount -o loop rootfs.img rootdir
+  tar xzvf ubuntu-base-$VERSION-base-arm64.tar.gz -C rootdir
+else
+  echo rootfs.img is already created, skipping... You can delete it manually.
+  mount -o loop rootfs.img rootdir
+fi
+
 #rm ubuntu-base-$VERSION-base-arm64.tar.gz
 
 mount --bind /dev rootdir/dev
@@ -62,7 +75,7 @@ chroot rootdir apt install -y rmtfs protection-domain-mapper tqftpserv
 #Remove check for "*-laptop"
 sed -i '/ConditionKernelVersion/d' rootdir/lib/systemd/system/pd-mapper.service
 
-cp /home/runner/work/ubuntu-${VENDOR}-${CODENAME}/ubuntu-${VENDOR}-${CODENAME}/${VENDOR}-${CODENAME}-debs_$2/*-${VENDOR}-${CODENAME}.deb rootdir/tmp/
+cp ${WORK_DIR}/*-${VENDOR}-${CODENAME}.deb rootdir/tmp/
 chroot rootdir dpkg -i /tmp/linux-${VENDOR}-${CODENAME}.deb
 chroot rootdir dpkg -i /tmp/firmware-${VENDOR}-${CODENAME}.deb
 chroot rootdir dpkg -i /tmp/alsa-${VENDOR}-${CODENAME}.deb
@@ -110,3 +123,4 @@ rm -d rootdir
 echo 'cmdline for legacy boot: "root=PARTLABEL=linux"'
 
 7zz a rootfs.7z rootfs.img
+

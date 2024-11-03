@@ -1,7 +1,10 @@
 source ./scripts/vars.sh
 source ./scripts/funcs.sh
 
+mkdir -p "${GIT_CACHE_DIR}" "${BUILD_DIR}"
+
 # Clone the kernel source repository
+SOURCE="${KERNEL_SOURCE} -b ${BRANCH}"
 if [ -d "$KERNEL_DIR" ]; then
 	echo "Directory '$KERNEL_DIR' exists."
 	read -p "Do you want to delete it and re-clone? (y/n): " answer
@@ -36,20 +39,21 @@ else
 fi
 
 # Remove the lib directory if it exists
-rm -rf "${OUTPUT_DIR}/lib"
+rm -rf "${KERNEL_PACKAGE_DIR}/lib"
 
 # Install the modules to the output directory
-make $MAKEPROPS INSTALL_MOD_PATH="$OUTPUT_DIR" modules_install || { echo "Modules installation failed"; exit 1; }
+make $MAKEPROPS INSTALL_MOD_PATH="$KERNEL_PACKAGE_DIR" modules_install || { echo "Modules installation failed"; exit 1; }
 
 # Remove all 'build' directories within the modules
-find "$OUTPUT_DIR/lib/modules" -type d -name "build" -exec rm -rf {} + || { echo "Failed to remove build directories"; }
+find "$KERNEL_PACKAGE_DIR/lib/modules" -type d -name "build" -exec rm -rf {} + || { echo "Failed to remove build directories"; }
 
-# Change back to the parent directory
-cd ..
+# Change to the build directory
+cd ${BUILD_DIR}
 
 # Generate Debian control files
 generate_control linux
 
 # Build the Debian package
-dpkg-deb --build --root-owner-group "linux-${VENDOR}-${CODENAME}"
-
+PACKAGE_NAME="linux-${VENDOR}-${CODENAME}"
+dpkg-deb --build --root-owner-group "${PACKAGE_NAME}"
+mv -f "${PACKAGE_NAME}.deb" "${WORK_DIR}/${PACKAGE_NAME}.deb"
