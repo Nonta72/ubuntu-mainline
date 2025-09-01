@@ -2,7 +2,7 @@
 DEVICE="Nothing Phone (1):sm7325-nothing-spacewar"
 
 # Kernel
-KERNEL_SOURCE="https://github.com/Nonta72/linux.git"
+KERNEL_SOURCE="https://github.com/mainlining/linux.git"
 BRANCH="danila/spacewar-testing"
 DEFCONFIG="defconfig sc7280.config"
 
