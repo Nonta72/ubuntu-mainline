@@ -4,7 +4,7 @@ DEVICE="Nothing Phone (1):sm7325-nothing-spacewar"
 # Kernel
 KERNEL_SOURCE="https://github.com/Nonta72/linux.git"
 BRANCH="danila/spacewar-testing"
-DEFCONFIG="sc7280.config"
+DEFCONFIG="defconfig sc7280.config"
 
 # Maintainer
 MAINTAINER="Ubuntu Mainline <fix@me>"
