@@ -2,15 +2,10 @@
 DEVICE="Nothing Phone (1):sm7325-nothing-spacewar"
 
 # Kernel
-KERNEL_SOURCE="https://github.com/mainlining/linux.git"
-BRANCH="danila/spacewar-testing"
-DEFCONFIG="defconfig sc7280.config"
-
-# Repositories and branches
-declare -A REPOS=(
-  ["FIRMWARE"]="https://github.com/mainlining/firmware-nothing-spacewar master"
-  ["ALSAUCM"]="https://github.com/mainlining/alsa-ucm-conf spacewar/pong"
-)
+KERNEL_SOURCE="https://github.com/sc7280-mainline/linux"
+BRANCH="sc7280-6.19.y"
+DEFCONFIG="Spacewar.config"
+FIRMWARE_SOURCE="https://github.com/mainlining/firmware-nothing-spacewar"
 
 # Maintainer
 MAINTAINER="Ubuntu Mainline <fix@me>"
