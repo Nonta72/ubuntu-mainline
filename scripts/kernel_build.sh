@@ -16,6 +16,11 @@ else
 	git clone $SOURCE --depth 1 "${KERNEL_DIR}" || { echo "Failed to clone kernel source"; exit 1; }
 fi
 
+# Use pmos kernel config
+cd "$KERNEL_DIR"/arch/arm64/configs
+wget https://gitlab.postmarketos.org/postmarketOS/pmaports/-/raw/main/device/community/linux-postmarketos-qcom-sc7280/config-postmarketos-qcom-sc7280.aarch64?ref_type=heads&inline=false
+mv config-postmarketos-qcom-sc7280.aarch64?ref_type=heads Spacewar.config
+
 # Change to the kernel directory
 cd "$KERNEL_DIR"
 
