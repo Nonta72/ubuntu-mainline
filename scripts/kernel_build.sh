@@ -1,5 +1,6 @@
 #!/bin/bash
 
+source
 source $PWD/scripts/vars.sh
 source $PWD//scripts/funcs.sh
 
