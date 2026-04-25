@@ -7,7 +7,7 @@ log() {
 }
 
 # Install the necessary tools first
-sudo apt update && sudo apt install unzip build-essential gcc-aarch64-linux-gnu bc flex bison 7zip kmod bash cpio binutils tar git wget dpkg libssl-dev rpm
+sudo apt update && sudo apt install unzip build-essential gcc-aarch64-linux-gnu bc flex bison 7zip-standalone kmod bash cpio binutils tar git wget dpkg libssl-dev rpm zstd -y
 
 # On Ubuntu 24.04, the mkbootimg package is broken with the infamous error "no module named gki"
 # We need to use the LineageOS prebuilt version
