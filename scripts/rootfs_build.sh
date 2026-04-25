@@ -10,10 +10,10 @@ then
 	exit
 fi
 
-VERSION="24.10"
+VERSION="24.04.4"
 
-if [ ! -f "ubuntu-base-$UBUNTU_VERSION-base-arm64.tar.gz" ]; then
-  wget https://cdimage.ubuntu.com/ubuntu-base/releases/$UBUNTU_VERSION/release/ubuntu-base-$UBUNTU_VERSION-base-arm64.tar.gz
+if [ ! -f "ubuntu-base-$VERSION-base-arm64.tar.gz" ]; then
+  wget https://cdimage.ubuntu.com/ubuntu-base/releases/$VERSION/release/ubuntu-base-$VERSION-base-arm64.tar.gz
 else
   echo Rootfs is already downloaded, skipping... You can delete it manually.
 fi
