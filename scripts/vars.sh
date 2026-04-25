@@ -1,3 +1,5 @@
+#!/bin/bash
+
 source ./deviceinfo
 
 IFS=':' read -r DEVICE_NAME DEVICE <<< "${DEVICE}"
