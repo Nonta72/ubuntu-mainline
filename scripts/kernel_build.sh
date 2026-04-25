@@ -1,3 +1,5 @@
+#!/bin/bash
+
 source ./scripts/vars.sh
 source ./scripts/funcs.sh
 
