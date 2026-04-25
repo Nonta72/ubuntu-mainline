@@ -1,7 +1,7 @@
 #!/bin/bash
 
-source ./scripts/vars.sh
-source ./scripts/funcs.sh
+source $PWD/scripts/vars.sh
+source $PWD//scripts/funcs.sh
 
 mkdir -p "${GIT_CACHE_DIR}" "${BUILD_DIR}"
 
