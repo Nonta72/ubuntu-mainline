@@ -24,7 +24,7 @@ jobs:
         run: sudo apt update && sudo apt install build-essential gcc-aarch64-linux-gnu bc flex bison 7zip-standalone zstd kmod bash cpio binutils tar git wget dpkg libssl-dev -y
 
       - name: Build
-        run: sudo sh $PWDscripts/kernel_build.sh
+        run: sudo sh $PWD/scripts/kernel_build.sh
 
       - name: Upload deb packages
         uses: actions/upload-artifact@v4.0.0
