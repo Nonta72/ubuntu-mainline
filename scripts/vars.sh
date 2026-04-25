@@ -15,12 +15,11 @@ KERNEL_OUTPUT="${KERNEL_DIR}/.output"
 MAKEPROPS="-j$(nproc) O=${KERNEL_OUTPUT} ARCH=${ARCH} CROSS_COMPILE=aarch64-linux-gnu-"
 
 # Define paths to the Image and DTB files
-IMAGE_PATH="${KERNEL_OUTPUT}/arch/arm64/boot/Image.gz"
-DTB_PATH="${KERNEL_OUTPUT}/arch/arm64/boot/dts/qcom/${DEVICE}.dtb"
+IMAGE_PATH="${KERNEL_OUTPUT}/arch/arm64/boot/Image"
+DTB_PATH="${WORK_DIR}/spacewar.dtb"
 
 # Define output directories
 KERNEL_PACKAGE_DIR="${BUILD_DIR}/linux-${VENDOR}-${CODENAME}"
 BOOT_DIR="${KERNEL_PACKAGE_DIR}/boot"
 
 FIRMWARE_PACKAGE_DIR="${BUILD_DIR}/firmware-${VENDOR}-${CODENAME}"
-
