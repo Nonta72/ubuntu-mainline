@@ -4,12 +4,6 @@ name: rootfs
 
 # Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
-  push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
-
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -20,23 +14,23 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
             matrix:
-                version: [6.7-working, 6.8]
+                version: [sc7280-6.19.y]
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
         
       - name: Install Dependencies
-        run: sudo apt update && sudo apt install build-essential gcc-aarch64-linux-gnu bc flex bison 7zip kmod bash cpio binutils tar git wget dpkg libssl-dev
+        run: sudo apt update && sudo apt install build-essential gcc-aarch64-linux-gnu bc flex bison 7zip-standalone zstd kmod bash cpio binutils tar git wget dpkg libssl-dev -y
 
-      - name: Build kernel
-        run: sudo sh nabu-kernel_build.sh ${{ matrix.version }}
+      - name: Build
+        run: sudo sh scripts/kernel_build.sh
 
       - name: Upload deb packages
         uses: actions/upload-artifact@v4.0.0
         with:
           # Artifact name
-          name: xiaomi-nabu-debs_${{ matrix.version }}
+          name: nothing-spacewar-debs_${{ matrix.version }}
           path: ${{ github.workspace }}/*.deb
           
   rootfs:
@@ -45,20 +39,20 @@ jobs:
     needs: kernel
     strategy:
             matrix:
-                desktop: [ubuntu-desktop, lomiri]
-                kernel: [6.7-working, 6.8]
+                desktop: [ubuntu-desktop]
+                kernel: [sc7280-6.19.y]
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
         with:
-          pattern: xiaomi-nabu-debs*
+          pattern: nothing-spacewar-debs*
       - name: Install Dependencies
-        run: sudo apt update && sudo apt install unzip build-essential gcc-aarch64-linux-gnu bc flex bison 7zip kmod bash cpio binutils tar git wget dpkg libssl-dev
+        run: sudo apt update && sudo apt install build-essential gcc-aarch64-linux-gnu bc flex bison 7zip-standalone zstd kmod bash cpio binutils tar git wget dpkg libssl-dev -y
 
       - name: Build rootfs
-        run: sudo sh nabu-rootfs_build.sh ${{ matrix.desktop }} ${{ matrix.kernel }}
+        run: sudo sh scripts/rootfs_build.sh ${{ matrix.desktop }} ${{ matrix.kernel }}
 
       - name: Upload rootfs.7z
         uses: actions/upload-artifact@v4.0.0
